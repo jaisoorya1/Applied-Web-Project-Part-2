@@ -2,6 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="Position Description Page">
         <meta name="keywords" content="cyber, security, jobs, availble">
         <meta name="author" content="Dat">
@@ -18,22 +19,8 @@
         </style>
     </head>
     <body>
-        <header class="main-header">
-        <!-- Logo strictly on the left -->
-        <div class="logo-area">
-            <h1>🛡️ BlackVaultCyber</h1>
-            <p class="slogan">Securing the Digital Frontier.</p>
-        </div>
-        
-        <nav class="nav-area">
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="jobs.html">Careers</a></li>
-                <li><a href="apply.html">Apply Now</a></li>
-                <li><a href="about.html">About Us</a></li>
-            </ul>
-        </nav>
-    </header>
+        <?php require __DIR__ . '/header.inc'; ?>
+
         <main class="index-bg">
             <section class="content-box">
                 <h2>Job listings</h2>
@@ -283,18 +270,6 @@
             
         </main>
 
-        
-
-        <footer>
-        <div class="footer-links">
-            <p>Project Resources:</p>
-            <ul>
-                <li><a href="https://jaiwebproject.atlassian.net/jira/software/projects/WA/boards/69/backlog?atlOrigin=eyJpIjoiNGJlNjE3NTBhYWRjNDkwNDhkNDMzZmNmNmE3YmRiYTAiLCJwIjoiaiJ9" target="_blank" rel="noopener noreferrer">Jira Board</a></li>
-                <li><a href="https://github.com/jaisoorya1/Applied-Web-Project-Part-1.git" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
-                <li><a href="mailto:blackvaultcyber@gmail.com">Contact Team</a></li>
-            </ul>
-        </div>
-        <p>&copy; 2026 BlackVaultCyber. All rights reserved.</p>
-    </footer>
+        <?php require __DIR__ . '/footer.inc'; ?>
     </body>
 </html>
