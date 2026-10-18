@@ -19,23 +19,7 @@
 </head>
 <body>
 
-   <header class="main-header">
-        <!-- Logo strictly on the left -->
-        <div class="logo-area">
-            <h1>🛡️ BlackVaultCyber</h1>
-            <p class="slogan">Securing the Digital Frontier.</p>
-        </div>
-        
-        <!-- Navigation strictly on the right -->
-        <nav class="nav-area">
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="jobs.html">Careers</a></li>
-                <li><a href="apply.html">Apply Now</a></li>
-                <li><a href="about.html">About Us</a></li>
-            </ul>
-        </nav>
-    </header>
+   <?php require __DIR__ . '/header.inc'; ?>
 
     <main class="index-bg">
         
