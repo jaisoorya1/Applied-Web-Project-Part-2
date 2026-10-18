@@ -133,15 +133,57 @@ $known_job_refs = [
 ];
 $allowed_statuses = ['New', 'Current', 'Final'];
 
-// 5. Fetch All EOI Records
+// 5. Read Search Filters (GET) & Execute Prepared SELECT Query
+$filter_type   = clean_db_param($_GET['filter_type'] ?? 'all');
+$job_ref_input = clean_db_param($_GET['job_ref_custom'] ?? '');
+if ($job_ref_input === '') {
+    $job_ref_input = clean_db_param($_GET['job_ref'] ?? '');
+}
+$first_name_q  = clean_db_param($_GET['first_name'] ?? '');
+$last_name_q   = clean_db_param($_GET['last_name'] ?? '');
+
 $eoi_records = [];
 if ($is_authenticated && $conn instanceof mysqli && $db_error === '') {
-    $res = @mysqli_query($conn, "SELECT * FROM `eoi` ORDER BY `EOInumber` ASC");
-    if ($res) {
-        while ($row = mysqli_fetch_assoc($res)) {
-            $eoi_records[] = $row;
+    $where_clauses = [];
+    $bind_types    = '';
+    $bind_values   = [];
+
+    if ($filter_type === 'job_ref' && $job_ref_input !== '') {
+        $where_clauses[] = "UPPER(`job_ref`) = UPPER(?)";
+        $bind_types     .= 's';
+        $bind_values[]   = $job_ref_input;
+    } elseif ($filter_type === 'applicant') {
+        if ($first_name_q !== '') {
+            $where_clauses[] = "`first_name` LIKE ?";
+            $bind_types     .= 's';
+            $bind_values[]   = '%' . $first_name_q . '%';
         }
-        mysqli_free_result($res);
+        if ($last_name_q !== '') {
+            $where_clauses[] = "`last_name` LIKE ?";
+            $bind_types     .= 's';
+            $bind_values[]   = '%' . $last_name_q . '%';
+        }
+    }
+
+    $sql = "SELECT * FROM `eoi`";
+    if (!empty($where_clauses)) {
+        $sql .= ' WHERE ' . implode(' AND ', $where_clauses);
+    }
+    $sql .= " ORDER BY `EOInumber` ASC";
+
+    $stmt = mysqli_prepare($conn, $sql);
+    if ($stmt) {
+        if ($bind_types !== '') {
+            mysqli_stmt_bind_param($stmt, $bind_types, ...$bind_values);
+        }
+        if (mysqli_stmt_execute($stmt)) {
+            $result = mysqli_stmt_get_result($stmt);
+            while ($row = mysqli_fetch_assoc($result)) {
+                $eoi_records[] = $row;
+            }
+            mysqli_free_result($result);
+        }
+        mysqli_stmt_close($stmt);
     }
 }
 ?>
