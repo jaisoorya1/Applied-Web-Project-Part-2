@@ -1,11 +1,4 @@
 <?php
-/**
- * COS10026 Web Technology Project - Applied Web Project Part 2
- * File: manage.php (HR Manager Portal)
- * Author: Mohammad (Student ID: 106205050) - Member 4
- * Purpose: Authenticated HR management portal for Expression of Interest (EOI) records.
- */
-
 session_start();
 
 // 1. Handle Logout Request (POST)
@@ -140,7 +133,42 @@ $known_job_refs = [
 ];
 $allowed_statuses = ['New', 'Current', 'Final'];
 
-// 5. Read Search Filters (GET) & Execute Prepared SELECT Query
+// 5. Handle EOI Status Update (POST)
+$feedback_msg  = '';
+$feedback_type = '';
+if ($is_authenticated && $conn instanceof mysqli && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    $post_action = clean_db_param($_POST['action'] ?? '');
+    $posted_csrf = $_POST['csrf_token'] ?? '';
+
+    if ($post_action === 'update_status') {
+        if (!hash_equals($csrf_token, $posted_csrf)) {
+            $feedback_msg  = 'Invalid CSRF security token.';
+            $feedback_type = 'error';
+        } else {
+            $eoi_id_raw = clean_db_param($_POST['eoi_id'] ?? '');
+            $new_status = clean_db_param($_POST['new_status'] ?? '');
+            if ($eoi_id_raw === '' || !ctype_digit($eoi_id_raw) || (int)$eoi_id_raw <= 0) {
+                $feedback_msg  = 'Validation Error: Please enter a valid positive EOI Number.';
+                $feedback_type = 'error';
+            } elseif (!in_array($new_status, $allowed_statuses, true)) {
+                $feedback_msg  = 'Validation Error: Status must be New, Current, or Final.';
+                $feedback_type = 'error';
+            } else {
+                $eoi_id_int = (int)$eoi_id_raw;
+                $upd_stmt = mysqli_prepare($conn, "UPDATE `eoi` SET `status` = ? WHERE `EOInumber` = ?");
+                if ($upd_stmt) {
+                    mysqli_stmt_bind_param($upd_stmt, 'si', $new_status, $eoi_id_int);
+                    mysqli_stmt_execute($upd_stmt);
+                    $feedback_msg  = "Updated EOInumber #$eoi_id_int to status '$new_status'.";
+                    $feedback_type = 'success';
+                    mysqli_stmt_close($upd_stmt);
+                }
+            }
+        }
+    }
+}
+
+// 6. Read Search Filters (GET) & Execute Prepared SELECT Query
 $filter_type   = clean_db_param($_GET['filter_type'] ?? 'all');
 $job_ref_input = clean_db_param($_GET['job_ref_custom'] ?? '');
 if ($job_ref_input === '') {
