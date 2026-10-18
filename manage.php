@@ -132,6 +132,18 @@ $known_job_refs = [
     'PEN026' => 'PEN026 — Penetration Tester',
 ];
 $allowed_statuses = ['New', 'Current', 'Final'];
+
+// 5. Fetch All EOI Records
+$eoi_records = [];
+if ($is_authenticated && $conn instanceof mysqli && $db_error === '') {
+    $res = @mysqli_query($conn, "SELECT * FROM `eoi` ORDER BY `EOInumber` ASC");
+    if ($res) {
+        while ($row = mysqli_fetch_assoc($res)) {
+            $eoi_records[] = $row;
+        }
+        mysqli_free_result($res);
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -262,6 +274,43 @@ $allowed_statuses = ['New', 'Current', 'Final'];
                         </form>
                     </div>
                 </div>
+            </section>
+
+            <section class="content-box" style="max-width: 1150px;">
+                <h2>EOI Query Results (<?php echo count($eoi_records); ?> Records)</h2>
+                <?php if (empty($eoi_records)): ?>
+                    <p>No Expression of Interest (EOI) records found.</p>
+                <?php else: ?>
+                    <div class="table-container">
+                        <table class="cyber-table">
+                            <caption>Submitted Expressions of Interest</caption>
+                            <thead>
+                                <tr>
+                                    <th scope="col">EOI #</th>
+                                    <th scope="col">Job Ref</th>
+                                    <th scope="col">First Name</th>
+                                    <th scope="col">Last Name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Phone</th>
+                                    <th scope="col">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($eoi_records as $row): ?>
+                                <tr>
+                                    <td>#<?php echo sanitise_input((string)($row['EOInumber'] ?? '')); ?></td>
+                                    <td><span class="student-id"><?php echo sanitise_input((string)($row['job_ref'] ?? '')); ?></span></td>
+                                    <td><?php echo sanitise_input((string)($row['first_name'] ?? '')); ?></td>
+                                    <td><?php echo sanitise_input((string)($row['last_name'] ?? '')); ?></td>
+                                    <td><?php echo sanitise_input((string)($row['email'] ?? '')); ?></td>
+                                    <td><?php echo sanitise_input((string)($row['phone'] ?? '')); ?></td>
+                                    <td><?php echo sanitise_input((string)($row['status'] ?? 'New')); ?></td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php endif; ?>
             </section>
         <?php endif; ?>
     </main>
