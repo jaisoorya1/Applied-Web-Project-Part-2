@@ -28,21 +28,8 @@
 </head>
 <body>
 
-    <header class="main-header">
-        <div class="logo-area">
-            <h1><span aria-hidden="true">🛡️</span> BlackVaultCyber</h1>
-            <p class="slogan">Securing the Digital Frontier.</p>
-        </div>
-        
-        <nav class="nav-area" aria-label="Main Navigation">
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="jobs.html">Careers</a></li>
-                <li><a href="apply.html">Apply Now</a></li>
-                <li><a href="about.html" class="active">About Us</a></li>
-            </ul>
-        </nav>
-    </header>
+    //header
+    <?php require __DIR__ . '/header.inc'; ?>
 
     <main class="content-box">
         
@@ -158,17 +145,8 @@
 
     </main>
 
-    <footer>
-        <div class="footer-links">
-            <p>Project Resources:</p>
-            <ul>
-                <li><a href="https://jaiwebproject.atlassian.net/jira/software/projects/WA/boards/69/backlog?atlOrigin=eyJpIjoiNGJlNjE3NTBhYWRjNDkwNDhkNDMzZmNmNmE3YmRiYTAiLCJwIjoiaiJ9" target="_blank" rel="noopener noreferrer">Jira Board</a></li>
-                <li><a href="https://github.com/jaisoorya1/Applied-Web-Project-Part-1.git" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
-                <li><a href="mailto:blackvaultcyber@gmail.com">Contact Team</a></li>
-            </ul>
-        </div>
-        <p>&copy; 2026 BlackVaultCyber. All rights reserved.</p>
-    </footer>
+    //footer
+    <?php require __DIR__ . '/footer.inc'; ?>
 
 </body>
 </html>
