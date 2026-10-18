@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BlackVaultCyber | Home</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles/styles.css">
     
     <!-- REQUIREMENT: Embedded CSS -->
     <style>
@@ -82,6 +82,6 @@
 
     //footer
     <?php require __DIR__ . '/footer.inc'; ?>
-    
+
 </body>
 </html>

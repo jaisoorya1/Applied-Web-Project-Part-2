@@ -6,10 +6,11 @@
     <meta name="keywords" content="cyber, security, jobs, availble">
     <meta name="author" content="Dat">
     <title>BlackVaultCyber | Application</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles/styles.css">
 </head>
 
 <body>
+    //header
     <?php require __DIR__ . '/header.inc'; ?>
 
 
@@ -106,8 +107,7 @@
     </form>  
 
     </main>
-
-<?php require __DIR__ . '/footer.inc'; ?>
-</footer>
+        //footer
+        <?php require __DIR__ . '/footer.inc'; ?>
 </body>
 </html>

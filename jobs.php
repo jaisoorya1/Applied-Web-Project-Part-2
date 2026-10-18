@@ -7,7 +7,7 @@
         <meta name="keywords" content="cyber, security, jobs, availble">
         <meta name="author" content="Dat">
         <title>Position Description Page</title>
-        <link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="styles/styles.css">
         <style>
             .digital-highlight {
                 background-color: #00ffcc;
