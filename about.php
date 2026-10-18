@@ -28,7 +28,6 @@
 </head>
 <body>
 
-    //header
     <?php require __DIR__ . '/header.inc'; ?>
 
     <main class="content-box">
@@ -145,7 +144,6 @@
 
     </main>
 
-    //footer
     <?php require __DIR__ . '/footer.inc'; ?>
 
 </body>

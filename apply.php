@@ -10,7 +10,6 @@
 </head>
 
 <body>
-    //header
     <?php require __DIR__ . '/header.inc'; ?>
 
 
@@ -107,7 +106,6 @@
     </form>  
 
     </main>
-        //footer
         <?php require __DIR__ . '/footer.inc'; ?>
 </body>
 </html>
