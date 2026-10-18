@@ -1,4 +1,11 @@
 <?php
+/**
+ * COS10026 Web Technology Project - Applied Web Project Part 2
+ * File: manage.php (HR Manager Portal)
+ * Author: Mohammad (Student ID: 106205050) - Member 4
+ * Purpose: Authenticated HR management portal for Expression of Interest (EOI) records.
+ */
+
 session_start();
 
 // 1. Handle Logout Request (POST)
@@ -141,6 +148,23 @@ if ($job_ref_input === '') {
 }
 $first_name_q  = clean_db_param($_GET['first_name'] ?? '');
 $last_name_q   = clean_db_param($_GET['last_name'] ?? '');
+$sort_field_in = clean_db_param($_GET['sort_by'] ?? 'id');
+$sort_dir_in   = strtoupper(clean_db_param($_GET['sort_dir'] ?? 'ASC'));
+
+$sortable_columns = [
+    'id'         => ['col' => 'EOInumber',  'label' => 'EOI Number'],
+    'job_ref'    => ['col' => 'job_ref',    'label' => 'Job Reference'],
+    'first_name' => ['col' => 'first_name', 'label' => 'First Name'],
+    'last_name'  => ['col' => 'last_name',  'label' => 'Last Name'],
+    'email'      => ['col' => 'email',      'label' => 'Email Address'],
+    'start_date' => ['col' => 'start_date', 'label' => 'Start Date'],
+    'status'     => ['col' => 'status',     'label' => 'Application Status'],
+];
+if (!isset($sortable_columns[$sort_field_in])) {
+    $sort_field_in = 'id';
+}
+$order_by_col = $sortable_columns[$sort_field_in]['col'];
+$order_by_dir = ($sort_dir_in === 'DESC') ? 'DESC' : 'ASC';
 
 $eoi_records = [];
 if ($is_authenticated && $conn instanceof mysqli && $db_error === '') {
@@ -169,7 +193,7 @@ if ($is_authenticated && $conn instanceof mysqli && $db_error === '') {
     if (!empty($where_clauses)) {
         $sql .= ' WHERE ' . implode(' AND ', $where_clauses);
     }
-    $sql .= " ORDER BY `EOInumber` ASC";
+    $sql .= " ORDER BY `$order_by_col` $order_by_dir";
 
     $stmt = mysqli_prepare($conn, $sql);
     if ($stmt) {
