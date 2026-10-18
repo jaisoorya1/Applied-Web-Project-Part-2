@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 
 // 1. Handle Logout Request (POST)
@@ -81,6 +80,58 @@ if (!$is_authenticated && file_exists(__DIR__ . '/login.php')) {
 }
 
 $current_manager = $_SESSION['username'] ?? $_SESSION['user'] ?? $_SESSION['admin'] ?? 'admin';
+
+// 4. Security & Input Sanitisation Helpers
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+$csrf_token = $_SESSION['csrf_token'];
+
+function sanitise_input(?string $data): string {
+    if ($data === null) {
+        return '';
+    }
+    $data = trim($data);
+    $data = stripslashes($data);
+    return htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
+}
+
+function clean_db_param(?string $data): string {
+    if ($data === null) {
+        return '';
+    }
+    return stripslashes(trim($data));
+}
+
+function ensure_eoi_table(mysqli $conn): void {
+    $sql = "CREATE TABLE IF NOT EXISTS `eoi` (
+        `EOInumber` INT AUTO_INCREMENT PRIMARY KEY,
+        `job_ref` VARCHAR(30) NOT NULL,
+        `first_name` VARCHAR(50) NOT NULL,
+        `last_name` VARCHAR(50) NOT NULL,
+        `email` VARCHAR(100) NOT NULL,
+        `phone` VARCHAR(20) NOT NULL,
+        `start_date` DATE DEFAULT NULL,
+        `experience` VARCHAR(30) DEFAULT NULL,
+        `linkedin` VARCHAR(255) DEFAULT NULL,
+        `cover_letter` TEXT DEFAULT NULL,
+        `status` ENUM('New', 'Current', 'Final') NOT NULL DEFAULT 'New',
+        `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
+    @mysqli_query($conn, $sql);
+}
+
+if ($conn instanceof mysqli && $db_error === '') {
+    ensure_eoi_table($conn);
+}
+
+$known_job_refs = [
+    'SOC026' => 'SOC026 — SOC Analyst',
+    'IRE026' => 'IRE026 — Incident Response Engineer',
+    'SEC026' => 'SEC026 — Security Engineer',
+    'PEN026' => 'PEN026 — Penetration Tester',
+];
+$allowed_statuses = ['New', 'Current', 'Final'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
