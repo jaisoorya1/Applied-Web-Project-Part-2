@@ -80,17 +80,8 @@
         
     </main>
 
-    <footer>
-        <div class="footer-links">
-            <p>Project Resources:</p>
-            <ul>
-                <li><a href="https://jaiwebproject.atlassian.net/jira/software/projects/WA/boards/69/backlog?atlOrigin=eyJpIjoiNGJlNjE3NTBhYWRjNDkwNDhkNDMzZmNmNmE3YmRiYTAiLCJwIjoiaiJ9" target="_blank" rel="noopener noreferrer">Jira Board</a></li>
-                <li><a href="https://github.com/jaisoorya1/Applied-Web-Project-Part-1.git" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
-                <li><a href="mailto:blackvaultcyber@gmail.com">Contact Team</a></li>
-            </ul>
-        </div>
-        <p>&copy; 2026 BlackVaultCyber. All rights reserved.</p>
-    </footer>
-
+    //footer
+    <?php require __DIR__ . '/footer.inc'; ?>
+    
 </body>
 </html>
