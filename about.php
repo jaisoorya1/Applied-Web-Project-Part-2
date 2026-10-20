@@ -17,16 +17,38 @@ try {
         $team = mysqli_fetch_assoc($result);
 
         if (!$team) {exit('Please add team information to the database first.');}
+            // Get the members belonging to this team.
+            $statement = mysqli_prepare(
+                $conn,
+                "SELECT * FROM team_members
+                WHERE team_id = ?
+                ORDER BY display_order, member_id"
+            );
 
+            $team_id = (int) $team['team_id'];
+
+            mysqli_stmt_bind_param($statement, 'i', $team_id);
+            mysqli_stmt_execute($statement);
+
+            $member_result = mysqli_stmt_get_result($statement);
+
+            $members = [];
+
+            while ($member = mysqli_fetch_assoc($member_result)) {
+                $members[] = $member;
+            }
+
+            mysqli_free_result($member_result);
+            mysqli_stmt_close($statement);
     }
-catch (mysqli_sql_exception $error) 
-{
-    // Record technical details in the server log.
-    error_log($error->getMessage());
+    catch (mysqli_sql_exception $error) 
+    {
+        // Record technical details in the server log.
+        error_log($error->getMessage());
 
-    // Show visitors a simple message.
-    http_response_code(500);exit('Unable to load team information. Please try again later.');
-}
+        // Show visitors a simple message.
+        http_response_code(500);exit('Unable to load team information. Please try again later.');
+    }
 
     // Display database text safely.
     function about_escape($text)
@@ -122,52 +144,62 @@ catch (mysqli_sql_exception $error)
 
         </figure>
     </section>
-        <section class="contributions-section">
-            <h2>Member Contributions</h2>
-            <dl class="contribution-list">
-                <dt>
-                    <span class="member-name">Jai</span>                                                                                                                                             
-                </dt>
-                <dd>
-                    <strong>Key Responsibilities:</strong> Led overall project management and tracking using Jira, managed repository integrity and collaboration workflows on GitHub, and developed about.html with all required structures, figures, and data tables.
-                    <div class="member-quote">
-                        <p class="native-text" dir="rtl" lang="ur">"محنت اتنی خاموشی سے کرو کہ تمہاری کامیابی شور مچا دے۔"</p>
-                        <p class="trans-text"><strong>Translation (Urdu):</strong> "Work hard in silence, let your success be your noise."</p>
-                    </div>
-                </dd>
-                <dt>
-                    <span class="member-name">Mohammad</span>
-                </dt>
-                <dd>
-                    <strong>Key Responsibilities:</strong> Engineered layout for index.html, established the cybersecurity branding, implemented the multi-tiered services comparison table, and configured the CSS background pattern.
-                    <div class="member-quote">
-                        <p class="native-text" dir="rtl" lang="ar">"امشي عدل يحتار عدوک فيك"</p>
-                        <p class="trans-text"><strong>Translation (Arabic):</strong> "Walk the straight and narrow, and your enemies will have nothing on you."</p>
-                    </div>
-                </dd>
-                <dt>
-                    <span class="member-name">Dat</span>
-                </dt>
-                <dd>
-                    <strong>Key Responsibilities:</strong> Structured jobs.html, authored detailed cybersecurity job descriptions and qualification matrices, and engineered the layout for the complementary &lt;aside&gt; content module.
-                    <div class="member-quote">
-                        <p class="native-text" lang="vi">"Cứ thử đi."</p>
-                        <p class="trans-text"><strong>Translation (Vietnamese):</strong> "Just try it."</p>
-                    </div>
-                </dd>
-                <dt>
-                    <span class="member-name">Simran</span>
-                </dt>
-                <dd>
-                    <strong>Key Responsibilities:</strong> Built the complete semantic recruitment form in apply.html, configured fieldsets, labels, and strict HTML5 client-side input validations, and structured the form layout using modern CSS techniques.
-                    <div class="member-quote">
-                        <p class="native-text" lang="hi">"मैं उड़ना चाहता हूँ, दौड़ना चाहता हूँ, गिरना भी चाहता हूँ ... बस रुकना नहीं चाहता।"</p>
-                        <p class="trans-text"><strong>Translation (Hindi):</strong> "I want to fly, I want to run, I even want to fall ... I just don't want to stop."</p>
-                    </div>
-                </dd>
+        
+    <section class="contributions-section">
+    
+        <h2>Member Contributions</h2>
 
-            </dl>
-        </section>
+            <?php if (empty($members)): ?>
+                <p>No member information has been added yet.</p>
+            <?php else: ?>
+
+                <dl class="contribution-list">
+
+                    <?php foreach ($members as $member): ?>
+
+                        <dt>
+                            <span class="member-name">
+                                <?php echo about_escape($member['member_name']); ?>
+                            </span>
+                        </dt>
+
+                        <dd>
+                            <p>
+                                <strong>Project Part 1:</strong>
+                                <?php echo about_escape($member['part1_contribution']); ?>
+                            </p>
+
+                            <p>
+                                <strong>Project Part 2:</strong>
+                                <?php echo about_escape($member['part2_contribution']); ?>
+                            </p>
+
+                            <div class="member-quote">
+                                <p
+                                    class="native-text"
+                                    lang="<?php echo about_escape($member['quote_language_code']); ?>"
+                                    dir="<?php echo $member['quote_direction'] === 'rtl' ? 'rtl' : 'ltr'; ?>"
+                                >
+                                    <?php echo about_escape($member['native_quote']); ?>
+                                </p>
+
+                                <p class="trans-text">
+                                    <strong>
+                                        Translation
+                                        (<?php echo about_escape($member['quote_language']); ?>):
+                                    </strong>
+
+                                    <?php echo about_escape($member['quote_translation']); ?>
+                                </p>
+                            </div>
+                        </dd>
+
+                    <?php endforeach; ?>
+
+                </dl>
+
+            <?php endif; ?>
+    </section>
 
         <section class="team-facts-section">
             <h2>Team Profile &amp; Demographics</h2>
