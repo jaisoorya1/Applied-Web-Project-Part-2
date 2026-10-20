@@ -214,30 +214,27 @@ try {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Simran</td>
-                            <td><span class="student-id">106578257</span></td>
-                            <td> Kindle </td>
-                            <td>Owner of two dogs and a pet snake.</td>
-                        </tr>
-                        <tr>
-                            <td>Mohammad</td>
-                            <td><span class="student-id">106205050</span></td>
-                            <td>Modern Bidet Attachment</td>
-                            <td>Did you know that there are over 100 pyramids in Egypt?</td>
-                        </tr>
-                        <tr>
-                            <td>Jai</td>
-                            <td><span class="student-id">106206655</span></td>
-                            <td>Automated Threat Scanners</td>
-                            <td>Pakistan is home to the world's second-highest mountain peak (K2).</td>
-                        </tr>
-                        <tr>
-                            <td>Dat</td>
-                            <td><span class="student-id">106638766</span></td>
-                            <td>Prosthetic Limb Engineering</td>
-                            <td>Admittedly not a writer, but somehow always gets by.</td>
-                        </tr>
+                        <?php foreach ($members as $member): ?>
+                            <tr>
+                                <td>
+                                    <?php echo about_escape($member['member_name']); ?>
+                                </td>
+
+                                <td>
+                                    <span class="student-id">
+                                        <?php echo about_escape($member['student_id']); ?>
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <?php echo about_escape($member['favourite_technology']); ?>
+                                </td>
+
+                                <td>
+                                    <?php echo about_escape($member['fun_fact']); ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
                     </tbody>
                     <caption>BlackVaultCyber Security Personnel Interests and Background Facts</caption>
                 </table>
