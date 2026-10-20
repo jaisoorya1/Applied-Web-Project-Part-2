@@ -100,13 +100,28 @@ catch (mysqli_sql_exception $error)
                 </li>
             </ul>
     </section>
-          <section class="team-visual">
-              <h2>The Operations Team</h2>
-              <figure class="team-figure" style="max-width: 720px; margin: 25px auto;">
-                  <img src="images/group_photo.jpeg" alt="The four BlackVault Cyber team members" width="1600" height="1680">
-                  <figcaption>BlackVaultCyber Core Deployment Team: Mohammad, Simran, Jai, and Dat.</figcaption>
-              </figure>
-          </section>
+          
+    <section class="team-visual">
+
+        <h2>The Operations Team</h2>
+
+        <figure class="team-figure"
+                style="max-width: 720px; margin: 25px auto;">
+
+            <img
+                src="<?php echo about_escape($team['photo_path']); ?>"
+                alt="<?php echo about_escape($team['photo_alt']); ?>"
+                width="1600"
+                height="1680"
+                style="max-width: 100%; height: auto;"
+            >
+
+            <figcaption>
+                <?php echo about_escape($team['photo_caption']); ?>
+            </figcaption>
+
+        </figure>
+    </section>
         <section class="contributions-section">
             <h2>Member Contributions</h2>
             <dl class="contribution-list">
