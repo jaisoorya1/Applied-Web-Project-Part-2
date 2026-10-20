@@ -48,7 +48,7 @@
           <section class="team-visual">
               <h2>The Operations Team</h2>
               <figure class="team-figure" style="max-width: 720px; margin: 25px auto;">
-                  <img src="group_photo.jpeg" alt="The four BlackVault Cyber team members" width="1600" height="1680">
+                  <img src="images/group_photo.jpeg" alt="The four BlackVault Cyber team members" width="1600" height="1680">
                   <figcaption>BlackVaultCyber Core Deployment Team: Mohammad, Simran, Jai, and Dat.</figcaption>
               </figure>
           </section>
