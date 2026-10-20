@@ -1,3 +1,44 @@
+<?php
+// Load the shared database settings.
+require_once __DIR__ . '/settings.php';
+
+// Make database errors available to the catch block.
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
+try {
+    // Connect to MySQL using settings.php.
+        $conn = mysqli_connect($host, $user, $pwd, $sql_db);
+
+        // Support multilingual text.
+        mysqli_set_charset($conn, 'utf8mb4');
+        // Read the first team record.
+        $result = mysqli_query($conn,"SELECT * FROM about_team ORDER BY team_id LIMIT 1");
+
+        $team = mysqli_fetch_assoc($result);
+
+        if (!$team) {exit('Please add team information to the database first.');}
+
+    }
+catch (mysqli_sql_exception $error) 
+{
+    // Record technical details in the server log.
+    error_log($error->getMessage());
+
+    // Show visitors a simple message.
+    http_response_code(500);exit('Unable to load team information. Please try again later.');
+}
+
+    // Display database text safely.
+    function about_escape($text)
+    {
+        return htmlspecialchars(
+            (string) $text,
+            ENT_QUOTES | ENT_SUBSTITUTE,
+            'UTF-8'
+        );
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,19 +73,33 @@
 
     <main class="content-box">
         
-        <section class="team-info">
+    <section class="team-info">
             <h2>Team Information</h2>
+
             <ul class="nested-group-list">
-                <li><strong>Group Allocation:</strong> G01 - Cybersecurity Services</li>
+                <li>
+                    <strong>Group Allocation:</strong>
+                    <?php echo about_escape($team['group_allocation']); ?>
 
                     <ul>
-                        
-                        <li><strong>Team Identifier:</strong> Team Blaze</li>
-                        <li><strong>Tutorial Day:</strong> Wednesday</li>
-                        <li><strong>Tutorial Time:</strong> 2:30 PM - 4:30 PM</li>
+                        <li>
+                            <strong>Team Identifier:</strong>
+                            <?php echo about_escape($team['team_name']); ?>
+                        </li>
+
+                        <li>
+                            <strong>Tutorial Day:</strong>
+                            <?php echo about_escape($team['tutorial_day']); ?>
+                        </li>
+
+                        <li>
+                            <strong>Tutorial Time:</strong>
+                            <?php echo about_escape($team['tutorial_time']); ?>
+                        </li>
                     </ul>
+                </li>
             </ul>
-        </section>
+    </section>
           <section class="team-visual">
               <h2>The Operations Team</h2>
               <figure class="team-figure" style="max-width: 720px; margin: 25px auto;">
@@ -56,7 +111,7 @@
             <h2>Member Contributions</h2>
             <dl class="contribution-list">
                 <dt>
-                    <span class="member-name">Jai</span>                                                                                                                                            
+                    <span class="member-name">Jai</span>                                                                                                                                             
                 </dt>
                 <dd>
                     <strong>Key Responsibilities:</strong> Led overall project management and tracking using Jira, managed repository integrity and collaboration workflows on GitHub, and developed about.html with all required structures, figures, and data tables.
