@@ -1,3 +1,66 @@
+<?php
+// Load the shared database settings.
+require_once __DIR__ . '/settings.php';
+
+// Make database errors available to the catch block.
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
+try {
+    // Connect to MySQL using settings.php.
+        $conn = mysqli_connect($host, $user, $pwd, $sql_db);
+
+        // Support multilingual text.
+        mysqli_set_charset($conn, 'utf8mb4');
+        // Read the first team record.
+        $result = mysqli_query($conn,"SELECT * FROM about_team ORDER BY team_id LIMIT 1");
+
+        $team = mysqli_fetch_assoc($result);
+
+        if (!$team) {exit('Please add team information to the database first.');}
+            // Get the members belonging to this team.
+            $statement = mysqli_prepare(
+                $conn,
+                "SELECT * FROM team_members
+                WHERE team_id = ?
+                ORDER BY display_order, member_id"
+            );
+
+            $team_id = (int) $team['team_id'];
+
+            mysqli_stmt_bind_param($statement, 'i', $team_id);
+            mysqli_stmt_execute($statement);
+
+            $member_result = mysqli_stmt_get_result($statement);
+
+            $members = [];
+
+            while ($member = mysqli_fetch_assoc($member_result)) {
+                $members[] = $member;
+            }
+
+            mysqli_free_result($member_result);
+            mysqli_stmt_close($statement);
+    }
+    catch (mysqli_sql_exception $error) 
+    {
+        // Record technical details in the server log.
+        error_log($error->getMessage());
+
+        // Show visitors a simple message.
+        http_response_code(500);exit('Unable to load team information. Please try again later.');
+    }
+
+    // Display database text safely.
+    function about_escape($text)
+    {
+        return htmlspecialchars(
+            (string) $text,
+            ENT_QUOTES | ENT_SUBSTITUTE,
+            'UTF-8'
+        );
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,72 +95,111 @@
 
     <main class="content-box">
         
-        <section class="team-info">
+    <section class="team-info">
             <h2>Team Information</h2>
+
             <ul class="nested-group-list">
-                <li><strong>Group Allocation:</strong> G01 - Cybersecurity Services</li>
+                <li>
+                    <strong>Group Allocation:</strong>
+                    <?php echo about_escape($team['group_allocation']); ?>
 
                     <ul>
-                        
-                        <li><strong>Team Identifier:</strong> Team Blaze</li>
-                        <li><strong>Tutorial Day:</strong> Wednesday</li>
-                        <li><strong>Tutorial Time:</strong> 2:30 PM - 4:30 PM</li>
-                    </ul>
-            </ul>
-        </section>
-          <section class="team-visual">
-              <h2>The Operations Team</h2>
-              <figure class="team-figure" style="max-width: 720px; margin: 25px auto;">
-                  <img src="group_photo.jpeg" alt="The four BlackVault Cyber team members" width="1600" height="1680">
-                  <figcaption>BlackVaultCyber Core Deployment Team: Mohammad, Simran, Jai, and Dat.</figcaption>
-              </figure>
-          </section>
-        <section class="contributions-section">
-            <h2>Member Contributions</h2>
-            <dl class="contribution-list">
-                <dt>
-                    <span class="member-name">Jai</span>                                                                                                                                            
-                </dt>
-                <dd>
-                    <strong>Key Responsibilities:</strong> Led overall project management and tracking using Jira, managed repository integrity and collaboration workflows on GitHub, and developed about.html with all required structures, figures, and data tables.
-                    <div class="member-quote">
-                        <p class="native-text" dir="rtl" lang="ur">"محنت اتنی خاموشی سے کرو کہ تمہاری کامیابی شور مچا دے۔"</p>
-                        <p class="trans-text"><strong>Translation (Urdu):</strong> "Work hard in silence, let your success be your noise."</p>
-                    </div>
-                </dd>
-                <dt>
-                    <span class="member-name">Mohammad</span>
-                </dt>
-                <dd>
-                    <strong>Key Responsibilities:</strong> Engineered layout for index.html, established the cybersecurity branding, implemented the multi-tiered services comparison table, and configured the CSS background pattern.
-                    <div class="member-quote">
-                        <p class="native-text" dir="rtl" lang="ar">"امشي عدل يحتار عدوک فيك"</p>
-                        <p class="trans-text"><strong>Translation (Arabic):</strong> "Walk the straight and narrow, and your enemies will have nothing on you."</p>
-                    </div>
-                </dd>
-                <dt>
-                    <span class="member-name">Dat</span>
-                </dt>
-                <dd>
-                    <strong>Key Responsibilities:</strong> Structured jobs.html, authored detailed cybersecurity job descriptions and qualification matrices, and engineered the layout for the complementary &lt;aside&gt; content module.
-                    <div class="member-quote">
-                        <p class="native-text" lang="vi">"Cứ thử đi."</p>
-                        <p class="trans-text"><strong>Translation (Vietnamese):</strong> "Just try it."</p>
-                    </div>
-                </dd>
-                <dt>
-                    <span class="member-name">Simran</span>
-                </dt>
-                <dd>
-                    <strong>Key Responsibilities:</strong> Built the complete semantic recruitment form in apply.html, configured fieldsets, labels, and strict HTML5 client-side input validations, and structured the form layout using modern CSS techniques.
-                    <div class="member-quote">
-                        <p class="native-text" lang="hi">"मैं उड़ना चाहता हूँ, दौड़ना चाहता हूँ, गिरना भी चाहता हूँ ... बस रुकना नहीं चाहता।"</p>
-                        <p class="trans-text"><strong>Translation (Hindi):</strong> "I want to fly, I want to run, I even want to fall ... I just don't want to stop."</p>
-                    </div>
-                </dd>
+                        <li>
+                            <strong>Team Identifier:</strong>
+                            <?php echo about_escape($team['team_name']); ?>
+                        </li>
 
-            </dl>
-        </section>
+                        <li>
+                            <strong>Tutorial Day:</strong>
+                            <?php echo about_escape($team['tutorial_day']); ?>
+                        </li>
+
+                        <li>
+                            <strong>Tutorial Time:</strong>
+                            <?php echo about_escape($team['tutorial_time']); ?>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+    </section>
+          
+    <section class="team-visual">
+
+        <h2>The Operations Team</h2>
+
+        <figure class="team-figure"
+                style="max-width: 720px; margin: 25px auto;">
+
+            <img
+                src="<?php echo about_escape($team['photo_path']); ?>"
+                alt="<?php echo about_escape($team['photo_alt']); ?>"
+                width="1600"
+                height="1680"
+                style="max-width: 100%; height: auto;"
+            >
+
+            <figcaption>
+                <?php echo about_escape($team['photo_caption']); ?>
+            </figcaption>
+
+        </figure>
+    </section>
+        
+    <section class="contributions-section">
+    
+        <h2>Member Contributions</h2>
+
+            <?php if (empty($members)): ?>
+                <p>No member information has been added yet.</p>
+            <?php else: ?>
+
+                <dl class="contribution-list">
+
+                    <?php foreach ($members as $member): ?>
+
+                        <dt>
+                            <span class="member-name">
+                                <?php echo about_escape($member['member_name']); ?>
+                            </span>
+                        </dt>
+
+                        <dd>
+                            <p>
+                                <strong>Project Part 1:</strong>
+                                <?php echo about_escape($member['part1_contribution']); ?>
+                            </p>
+
+                            <p>
+                                <strong>Project Part 2:</strong>
+                                <?php echo about_escape($member['part2_contribution']); ?>
+                            </p>
+
+                            <div class="member-quote">
+                                <p
+                                    class="native-text"
+                                    lang="<?php echo about_escape($member['quote_language_code']); ?>"
+                                    dir="<?php echo $member['quote_direction'] === 'rtl' ? 'rtl' : 'ltr'; ?>"
+                                >
+                                    <?php echo about_escape($member['native_quote']); ?>
+                                </p>
+
+                                <p class="trans-text">
+                                    <strong>
+                                        Translation
+                                        (<?php echo about_escape($member['quote_language']); ?>):
+                                    </strong>
+
+                                    <?php echo about_escape($member['quote_translation']); ?>
+                                </p>
+                            </div>
+                        </dd>
+
+                    <?php endforeach; ?>
+
+                </dl>
+
+            <?php endif; ?>
+    </section>
 
         <section class="team-facts-section">
             <h2>Team Profile &amp; Demographics</h2>
@@ -112,30 +214,27 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Simran</td>
-                            <td><span class="student-id">106578257</span></td>
-                            <td> Kindle </td>
-                            <td>Owner of two dogs and a pet snake.</td>
-                        </tr>
-                        <tr>
-                            <td>Mohammad</td>
-                            <td><span class="student-id">106205050</span></td>
-                            <td>Modern Bidet Attachment</td>
-                            <td>Did you know that there are over 100 pyramids in Egypt?</td>
-                        </tr>
-                        <tr>
-                            <td>Jai</td>
-                            <td><span class="student-id">106206655</span></td>
-                            <td>Automated Threat Scanners</td>
-                            <td>Pakistan is home to the world's second-highest mountain peak (K2).</td>
-                        </tr>
-                        <tr>
-                            <td>Dat</td>
-                            <td><span class="student-id">106638766</span></td>
-                            <td>Prosthetic Limb Engineering</td>
-                            <td>Admittedly not a writer, but somehow always gets by.</td>
-                        </tr>
+                        <?php foreach ($members as $member): ?>
+                            <tr>
+                                <td>
+                                    <?php echo about_escape($member['member_name']); ?>
+                                </td>
+
+                                <td>
+                                    <span class="student-id">
+                                        <?php echo about_escape($member['student_id']); ?>
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <?php echo about_escape($member['favourite_technology']); ?>
+                                </td>
+
+                                <td>
+                                    <?php echo about_escape($member['fun_fact']); ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
                     </tbody>
                     <caption>BlackVaultCyber Security Personnel Interests and Background Facts</caption>
                 </table>
