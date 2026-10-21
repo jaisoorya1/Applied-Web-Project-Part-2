@@ -1,8 +1,8 @@
 <?php
 require_once "settings.php";
 $conn->set_charset("utf8mb4");
-$keyword = trim($_GET["ref_code"] ?? "");
-$type = trim($_GET["job_type"] ?? "");
+$keyword = trim($_GET["keyword"] ?? "");
+$type = trim($_GET["type"] ?? "");
 
 $allowedTypes = ["Full-time", "Part-time", "Contract", "Internship"];
 
@@ -224,11 +224,7 @@ function requirementList($text, $ordered = false) {
 
         <?php endwhile; ?>
 
-        <?php if ($result->num_rows === 0): ?>
-            <p>No jobs found. Try a different search keyword or employment type.</p>
-        <?php endif; ?>
 
-        </div>
 
         <?php
         $stmt->close();
