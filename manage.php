@@ -414,8 +414,7 @@ if ($is_authenticated && $conn instanceof mysqli && $db_error === '') {
                 <div class="hr-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:20px;margin-top:20px;">
                     <!-- 1. List All EOIs with Sort Option -->
                     <div class="hr-card" style="border:1px solid #333;background:#0a0a0a;padding:20px;border-radius:6px;">
-1.                         <h3>List All EOIs 
-&amp; Sort</h3>
+                        <h3>1. List All EOIs &amp; Sort</h3>
                         <form method="get" action="manage.php">
                             <input type="hidden" name="filter_type" value="all">
                             <label for="sort_by_all">Sort Field</label>
@@ -458,7 +457,7 @@ if ($is_authenticated && $conn instanceof mysqli && $db_error === '') {
                     <!-- 3. List EOIs by Applicant Name (First, Last, or Both) -->
                     <div class="hr-card" style="border:1px solid #333;background:#0a0a0a;padding:20px;border-radius:6px;">
                         <h3>3. List EOIs by Applicant Name</h3>
-                        <form method="get" action="manage.php">
+                        <form method="get" action="manage.php" autocomplete="off">
                             <input type="hidden" name="filter_type" value="applicant">
                             <label for="first_name_q">First Name</label>
                             <input type="text" id="first_name_q" name="first_name" placeholder="e.g. Sarah" value="<?php echo sanitise_input($first_name_q); ?>">
@@ -471,7 +470,7 @@ if ($is_authenticated && $conn instanceof mysqli && $db_error === '') {
                     <!-- 4. Change an EOI Status -->
                     <div class="hr-card" style="border:1px solid #333;background:#0a0a0a;padding:20px;border-radius:6px;">
                         <h3>4. Change an EOI Status</h3>
-                        <form method="post" action="manage.php">
+                        <form method="post" action="manage.php" autocomplete="off">
                             <input type="hidden" name="action" value="update_status">
                             <input type="hidden" name="csrf_token" value="<?php echo sanitise_input($csrf_token); ?>">
                             <label for="eoi_id_input">EOI Number *</label>
