@@ -1,7 +1,9 @@
 <?php
+
 session_start();
 
 // 1. Handle Logout Request (POST)
+// Clear session data and expire the session cookie when HR clicks Log Out
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'logout') {
     $_SESSION = [];
     if (ini_get('session.use_cookies')) {
@@ -401,7 +403,8 @@ if ($is_authenticated && $conn instanceof mysqli && $db_error === '') {
                 <div class="hr-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:20px;margin-top:20px;">
                     <!-- 1. List All EOIs with Sort Option -->
                     <div class="hr-card" style="border:1px solid #333;background:#0a0a0a;padding:20px;border-radius:6px;">
-                        <h3>1. List All EOIs &amp; Sort</h3>
+1.                         <h3>List All EOIs 
+&amp; Sort</h3>
                         <form method="get" action="manage.php">
                             <input type="hidden" name="filter_type" value="all">
                             <label for="sort_by_all">Sort Field</label>
