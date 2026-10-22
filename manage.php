@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 
 // 1. Handle Logout Request (POST)
@@ -20,6 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 }
 
 // 2. Database Connection via settings.php
+// Load team DB credentials if settings.php exists, otherwise use local XAMPP defaults
 if (file_exists(__DIR__ . '/settings.php')) {
     require_once __DIR__ . '/settings.php';
 }
@@ -49,6 +49,7 @@ if (!(isset($conn) && $conn instanceof mysqli)) {
     }
 }
 
+// Use utf8mb4 encoding so special characters in applicant names render safely
 if ($conn instanceof mysqli) {
     mysqli_set_charset($conn, 'utf8mb4');
 }
