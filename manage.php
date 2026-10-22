@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 
 // 1. Handle Logout Request (POST)
@@ -83,6 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         $login_ok = true;
     }
 
+    // Regenerate session ID upon login to prevent session fixation
     if ($login_ok) {
         session_regenerate_id(true);
         $_SESSION['username'] = $input_user;
@@ -100,6 +102,7 @@ $is_authenticated = !empty($_SESSION['username'])
     || !empty($_SESSION['logged_in'])
     || !empty($_SESSION['user_id']);
 
+// Redirect unauthenticated users to login.php if present
 if (!$is_authenticated && file_exists(__DIR__ . '/login.php')) {
     header('Location: login.php');
     exit;
