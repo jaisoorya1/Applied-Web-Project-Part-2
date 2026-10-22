@@ -284,6 +284,7 @@ $last_name_q   = clean_db_param($_GET['last_name'] ?? '');
 $sort_field_in = clean_db_param($_GET['sort_by'] ?? 'id');
 $sort_dir_in   = strtoupper(clean_db_param($_GET['sort_dir'] ?? 'ASC'));
 
+// Whitelist allowed ORDER BY columns so user input is never injected into SQL identifiers
 $sortable_columns = [
     'id'         => ['col' => $cols['id'],         'label' => 'EOI Number'],
     'job_ref'    => ['col' => $cols['job_ref'],    'label' => 'Job Reference'],
@@ -326,6 +327,7 @@ if ($is_authenticated && $conn instanceof mysqli && $db_error === '') {
         }
     }
 
+    // Build SELECT query dynamically using prepared statement placeholders
     $sql = "SELECT * FROM `eoi`";
     if (!empty($where_clauses)) {
         $sql .= ' WHERE ' . implode(' AND ', $where_clauses);
