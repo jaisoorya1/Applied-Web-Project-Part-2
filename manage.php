@@ -209,6 +209,7 @@ if ($is_authenticated && $conn instanceof mysqli && $_SERVER['REQUEST_METHOD'] =
             $feedback_msg  = 'Security validation failed (invalid CSRF token).';
             $feedback_type = 'error';
         } elseif ($post_action === 'update_status') {
+            // Validate EOI number (positive integer) and status whitelist before updating
             $eoi_id_raw = clean_db_param($_POST['eoi_id'] ?? '');
             $new_status = clean_db_param($_POST['new_status'] ?? '');
 
@@ -236,6 +237,7 @@ if ($is_authenticated && $conn instanceof mysqli && $_SERVER['REQUEST_METHOD'] =
                 }
             }
         } elseif ($post_action === 'delete_by_job_ref') {
+            // Require both a job reference and explicit checkbox confirmation before deleting
             $del_job_ref = clean_db_param($_POST['delete_job_ref_custom'] ?? '');
             if ($del_job_ref === '') {
                 $del_job_ref = clean_db_param($_POST['delete_job_ref_select'] ?? '');
