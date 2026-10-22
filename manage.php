@@ -116,11 +116,13 @@ if (empty($_SESSION['csrf_token'])) {
 }
 $csrf_token = $_SESSION['csrf_token'];
 
+// Escape output values before rendering in HTML to prevent XSS
 function sanitise_input(?string $data): string {
     if ($data === null) return '';
     return htmlspecialchars(stripslashes(trim($data)), ENT_QUOTES, 'UTF-8');
 }
 
+// Trim whitespace and slashes before binding parameters to SQL queries
 function clean_db_param(?string $data): string {
     if ($data === null) return '';
     return stripslashes(trim($data));
@@ -144,6 +146,7 @@ function ensure_eoi_table(mysqli $conn): void {
     @mysqli_query($conn, $sql);
 }
 
+// Map EOI column names dynamically so minor schema differences do not break queries
 function resolve_eoi_columns(mysqli $conn): array {
     $map = [
         'id' => 'EOInumber', 'job_ref' => 'job_ref', 'first_name' => 'first_name',
