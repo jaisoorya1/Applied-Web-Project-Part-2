@@ -515,6 +515,12 @@ if ($is_authenticated && $conn instanceof mysqli && $db_error === '') {
             <!-- EOI Query Results Table -->
             <section class="content-box" style="max-width: 1150px;">
                 <h2>EOI Query Results (<?php echo count($eoi_records); ?> Record<?php echo count($eoi_records) === 1 ? '' : 's'; ?>)</h2>
+                <p style="color: #999; font-size: 0.9rem; margin-bottom: 12px;">
+                    Sorted by: <strong><?php echo sanitise_input($sortable_columns[$sort_field_in]['label']); ?> (<?php echo sanitise_input($order_by_dir); ?>)</strong>
+                    <?php if ($filter_type !== 'all'): ?>
+                        | <a href="manage.php" style="color: var(--accent-color, #00ffcc);">Reset Filter</a>
+                    <?php endif; ?>
+                </p>
                 <?php if (empty($eoi_records)): ?>
                     <p style="color: #aaa;">No Expression of Interest (EOI) records match your query.</p>
                 <?php else: ?>
