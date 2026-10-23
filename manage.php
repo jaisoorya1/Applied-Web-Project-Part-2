@@ -398,10 +398,10 @@ if ($is_authenticated && $conn instanceof mysqli && $db_error === '') {
                 </div>
 
                 <?php if ($db_error !== ''): ?>
-                    <p style="color: #ff6b6b; margin-top: 15px;"><strong><?php echo sanitise_input($db_error); ?></strong></p>
+                    <p role="alert" aria-live="polite" style="color: #ff6b6b; margin-top: 15px;"><strong><?php echo sanitise_input($db_error); ?></strong></p>
                 <?php endif; ?>
                 <?php if ($feedback_msg !== ''): ?>
-                    <p style="color: <?php echo $feedback_type === 'success' ? '#00ffcc' : '#ff6b6b'; ?>; margin-top: 15px; font-weight: bold;">
+                    <p role="status" aria-live="polite" style="color: <?php echo $feedback_type === 'success' ? '#00ffcc' : '#ff6b6b'; ?>; margin-top: 15px; font-weight: bold;">
                         <?php echo sanitise_input($feedback_msg); ?>
                     </p>
                 <?php endif; ?>
