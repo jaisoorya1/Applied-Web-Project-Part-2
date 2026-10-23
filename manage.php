@@ -556,15 +556,16 @@ if ($is_authenticated && $conn instanceof mysqli && $db_error === '') {
                                     $row_mail = $row[$cols['email']] ?? '';
                                     $row_tel  = $row[$cols['phone']] ?? '';
                                     $row_stat = $row[$cols['status']] ?? 'New';
+                                    $stat_color = ($row_stat === 'Final') ? '#00ffcc' : (($row_stat === 'Current') ? '#ffd166' : '#e0e0e0');
                                 ?>
                                 <tr>
-                                    <td><strong style="color: var(--accent-color);">#<?php echo sanitise_input((string)$row_id); ?></strong></td>
+                                    <th scope="row"><strong style="color: var(--accent-color);">#<?php echo sanitise_input((string)$row_id); ?></strong></th>
                                     <td><span class="student-id"><?php echo sanitise_input((string)$row_job); ?></span></td>
                                     <td><?php echo sanitise_input((string)$row_fn); ?></td>
                                     <td><?php echo sanitise_input((string)$row_ln); ?></td>
                                     <td><?php echo sanitise_input((string)$row_mail); ?></td>
                                     <td><?php echo sanitise_input((string)$row_tel); ?></td>
-                                    <td><strong><?php echo sanitise_input((string)$row_stat); ?></strong></td>
+                                    <td><strong style="color: <?php echo $stat_color; ?>;"><?php echo sanitise_input((string)$row_stat); ?></strong></td>
                                     <td>
                                         <form method="post" action="manage.php?<?php echo sanitise_input($_SERVER['QUERY_STRING'] ?? ''); ?>" style="display:flex;gap:6px;align-items:center;">
                                             <input type="hidden" name="action" value="update_status">
@@ -598,3 +599,4 @@ if ($conn instanceof mysqli) {
     mysqli_close($conn);
 }
 ?>
+
