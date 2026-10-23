@@ -394,7 +394,10 @@ if ($is_authenticated && $conn instanceof mysqli && $db_error === '') {
                 <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
                     <div>
                         <h2>HR Manager Portal — EOI Administration</h2>
-                        <p>Signed in as: <strong style="color: var(--accent-color);"><?php echo sanitise_input((string)$current_manager); ?></strong></p>
+                        <p>
+                            Signed in as: <strong style="color: var(--accent-color);"><?php echo sanitise_input((string)$current_manager); ?></strong>
+                            <span style="color: #888; font-size: 0.9rem; margin-left: 8px;">| Database: <?php echo sanitise_input($db_name); ?></span>
+                        </p>
                     </div>
                     <form method="post" action="manage.php">
                         <input type="hidden" name="action" value="logout">
@@ -595,6 +598,7 @@ if ($is_authenticated && $conn instanceof mysqli && $db_error === '') {
 </body>
 </html>
 <?php
+// Close database connection cleanly after rendering page
 if ($conn instanceof mysqli) {
     mysqli_close($conn);
 }
