@@ -302,6 +302,7 @@ $order_by_col = $sortable_columns[$sort_field_in]['col'];
 $order_by_dir = ($sort_dir_in === 'DESC') ? 'DESC' : 'ASC';
 
 $eoi_records = [];
+$status_counts = ['New' => 0, 'Current' => 0, 'Final' => 0];
 if ($is_authenticated && $conn instanceof mysqli && $db_error === '') {
     $where_clauses = [];
     $bind_types    = '';
@@ -343,6 +344,10 @@ if ($is_authenticated && $conn instanceof mysqli && $db_error === '') {
             $result = mysqli_stmt_get_result($stmt);
             while ($row = mysqli_fetch_assoc($result)) {
                 $eoi_records[] = $row;
+                $st_val = $row[$cols['status']] ?? 'New';
+                if (isset($status_counts[$st_val])) {
+                    $status_counts[$st_val]++;
+                }
             }
             mysqli_free_result($result);
         }
@@ -517,6 +522,9 @@ if ($is_authenticated && $conn instanceof mysqli && $db_error === '') {
                 <h2>EOI Query Results (<?php echo count($eoi_records); ?> Record<?php echo count($eoi_records) === 1 ? '' : 's'; ?>)</h2>
                 <p style="color: #999; font-size: 0.9rem; margin-bottom: 12px;">
                     Sorted by: <strong><?php echo sanitise_input($sortable_columns[$sort_field_in]['label']); ?> (<?php echo sanitise_input($order_by_dir); ?>)</strong>
+                    | Breakdown — New: <strong><?php echo (int)$status_counts['New']; ?></strong>,
+                    Current: <strong><?php echo (int)$status_counts['Current']; ?></strong>,
+                    Final: <strong><?php echo (int)$status_counts['Final']; ?></strong>
                     <?php if ($filter_type !== 'all'): ?>
                         | <a href="manage.php" style="color: var(--accent-color, #00ffcc);">Reset Filter</a>
                     <?php endif; ?>
