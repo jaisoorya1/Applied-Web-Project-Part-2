@@ -30,11 +30,7 @@ $result = $conn->query($sql);
             </p>
         </section>
 
-        <form
-            class="apply-form"
-            action="process_eoi.php"
-            method="post"
-        >
+        <form class="apply-form" action="process_eoi.php" method="post">
 
             <!-- POSITION DETAILS -->
             <fieldset>
