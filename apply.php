@@ -1,3 +1,10 @@
+<?php
+include 'settings.php';
+
+$sql = "SELECT * FROM jobs WHERE 1=1";
+$result = $conn->query($sql);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,21 +39,18 @@
                 <p>
                     <label for="positions">Position Applying For *</label>
 
-                    <select id="positions" name="positions" required>
-                        <option value="">-- Select a position --</option>
-                        <option value="SOC026">
-                            SOC026 – SOC Analyst
-                        </option>
-                        <option value="IRE026">
-                            IRE026 – Incident Response Engineer
-                        </option>
-                        <option value="SEC026">
-                            SEC026 – Security Engineer
-                        </option>
-                        <option value="PEN026">
-                            PEN026 – Penetration Tester
-                        </option>
+                    <select name="course_id" required>
+                        <option value="">-- Select Course --</option>
+
+                        <?php while ($row = $result->fetch_assoc()) { ?>
+                            <option value="<?php echo $row['id']; ?>">
+                                <?php echo $row['ref_code'], " --- ", $row['title']; ?>
+                            </option>
+                        <?php } ?>
+
                     </select>
+
+                    
                 </p>
 
                 <p>
