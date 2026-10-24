@@ -25,7 +25,7 @@
 
         <form
             class="apply-form"
-            action="https://mercury.swin.edu.au/it000000/formtest.php"
+            action="process_eoi.php"
             method="post"
         >
 
