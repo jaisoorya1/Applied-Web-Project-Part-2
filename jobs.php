@@ -48,14 +48,6 @@ if (!empty($params)) {
 $stmt->execute();
 $result = $stmt->get_result();
 
-function e($value) {
-    return htmlspecialchars(
-        (string)($value ?? ""),
-        ENT_QUOTES,
-        "UTF-8"
-    );
-}
-
 function requirementList($text, $ordered = false) {
     $items = preg_split('/\r\n|\r|\n/', trim($text ?? ""));
     $items = array_filter($items, fn($item) => trim($item) !== "");
@@ -69,7 +61,7 @@ function requirementList($text, $ordered = false) {
     echo '<' . $tag . ' style="margin-left: 15px">';
 
     foreach ($items as $item) {
-        echo '<li>' . e(trim($item)) . '</li>';
+        echo '<li>' . trim($item) . '</li>';
     }
 
     echo '</' . $tag . '>';
@@ -139,23 +131,23 @@ function requirementList($text, $ordered = false) {
             <section class="content-box">
                 <h2>Job listings</h2>
                 <form method="GET" action="" class="job-search">
-                    <input type="search" name="keyword" placeholder="Search title, reference code or keyword" value="<?= e($keyword) ?>">
+                    <input type="search" name="keyword" placeholder="Search title, reference code or keyword" value="<?= $keyword ?>">
 
                     <select name="type">
                         <option value="">All employment types</option>
 
                         <?php foreach ($allowedTypes as $jobType): ?>
                             <option
-                                value="<?= e($jobType) ?>"
+                                value="<?= $jobType ?>"
                                 <?= $type === $jobType ? "selected" : "" ?>
                             >
-                                <?= e($jobType) ?>
+                                <?= $jobType ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
 
                     <button type="submit">Search Jobs</button>
-                    <a class="clear-link" href="<?= e(strtok($_SERVER["REQUEST_URI"], "?")) ?>">
+                    <a class="clear-link" href="<?= strtok($_SERVER["REQUEST_URI"], "?") ?>">
                         Clear filters
                     </a>
                 </form>
@@ -166,10 +158,10 @@ function requirementList($text, $ordered = false) {
             <?php while ($job = $result->fetch_assoc()): ?>
 
             <section class="content-box">
-                <h2><?= e($job["title"]) ?></h2>
+                <h2><?= $job["title"] ?></h2>
 
                 <aside>
-                    reference code: <?= e($job["ref_code"]) ?>
+                    reference code: <?= $job["ref_code"] ?>
                 </aside>
 
                 <p style="margin-bottom: 15px">
@@ -177,7 +169,7 @@ function requirementList($text, $ordered = false) {
                     text-transform: uppercase; letter-spacing: 2px;">
                         <strong>Employment Type: </strong>
                     </span>
-                    <?= e($job["job_type"]) ?>
+                    <?= $job["job_type"] ?>
                 </p>
 
                 <p style="margin-bottom: 15px">
@@ -185,12 +177,12 @@ function requirementList($text, $ordered = false) {
                     text-transform: uppercase; letter-spacing: 2px;">
                         <strong>Salary: </strong>
                     </span>
-                    <?= e($job["salary"]) ?>
+                    <?= $job["salary"] ?>
                 </p>
 
                 <h3 style="margin-bottom: 5px">Description:</h3>
                 <p style="margin-bottom: 15px">
-                    <?= nl2br(e($job["description"])) ?>
+                    <?= nl2br($job["description"]) ?>
                 </p>
 
                 <details>
@@ -217,7 +209,7 @@ function requirementList($text, $ordered = false) {
                     </details>
 
                     <aside>
-                        <?= nl2br(e($job["aside"])) ?>
+                        <?= nl2br($job["aside"]) ?>
                     </aside>
                 </details>
             </section>
