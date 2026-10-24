@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Oct 20, 2026 at 05:49 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Host: localhost
+-- Generation Time: Oct 24, 2026 at 05:27 AM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -63,7 +63,15 @@ CREATE TABLE `eoi` (
   `linkedin` varchar(255) DEFAULT NULL,
   `cover_letter` text DEFAULT NULL,
   `status` enum('New','Current','Final') NOT NULL DEFAULT 'New',
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `dob` date DEFAULT NULL,
+  `gender` varchar(20) DEFAULT NULL,
+  `street` varchar(40) DEFAULT NULL,
+  `suburb` varchar(40) DEFAULT NULL,
+  `state` varchar(3) DEFAULT NULL,
+  `postcode` char(4) DEFAULT NULL,
+  `skills` text DEFAULT NULL,
+  `other_skills` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
