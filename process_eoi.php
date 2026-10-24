@@ -1,5 +1,9 @@
 <?php
 // Redirect visitors who open this page without submitting the form.
+
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
+// Redirect visitors who open this page without submitting the form.
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: apply.php');
     exit;
@@ -17,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     <link rel="stylesheet" href="styles/styles.css">
 </head>
 <body>
-    <?php require DIR . '/header.inc'; ?>
+    <?php require __DIR__ . '/header.inc'; ?>
 
     <main class="content-box">
         <h2>Application Processing</h2>
@@ -26,3 +30,10 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             Your form reached the processor.
             Validation and database saving will be added next.
         </p>
+
+        <a href="apply.php">Return to application form</a>
+    </main>
+
+    <<?php require __DIR__ . '/footer.inc'; ?>
+</body>
+</html>
