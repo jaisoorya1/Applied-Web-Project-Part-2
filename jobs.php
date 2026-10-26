@@ -1,13 +1,8 @@
 <?php
 require_once "settings.php";
 $conn->set_charset("utf8mb4");
-$keyword = is_string($_GET["keyword"] ?? null)
-    ? trim($_GET["keyword"])
-    : "";
-
-$type = is_string($_GET["type"] ?? null)
-    ? trim($_GET["type"])
-    : "";
+$keyword = trim($_GET["keyword"] ?? "");
+$type = trim($_GET["type"] ?? "");
 
 $allowedTypes = ["Full-time", "Part-time", "Contract", "Internship"];
 
@@ -53,15 +48,6 @@ if (!empty($params)) {
 $stmt->execute();
 $result = $stmt->get_result();
 
-// Display text safely without treating it as HTML.
-function jobs_escape($value)
-{
-    return htmlspecialchars(
-        (string) ($value ?? ''),
-        ENT_QUOTES | ENT_SUBSTITUTE,
-        'UTF-8'
-    );
-}
 function requirementList($text, $ordered = false) {
     $items = preg_split('/\r\n|\r|\n/', trim($text ?? ""));
     $items = array_filter($items, fn($item) => trim($item) !== "");
@@ -75,7 +61,7 @@ function requirementList($text, $ordered = false) {
     echo '<' . $tag . ' style="margin-left: 15px">';
 
     foreach ($items as $item) {
-        echo '<li>' . jobs_escape(trim($item)) . '</li>';
+        echo '<li>' . trim($item) . '</li>';
     }
 
     echo '</' . $tag . '>';
@@ -145,35 +131,43 @@ function requirementList($text, $ordered = false) {
             <section class="content-box">
                 <h2>Job listings</h2>
                 <form method="GET" action="" class="job-search">
-                    <input type="search" name="keyword" placeholder="Search title, reference code or keyword" value="<?= jobs_escape($keyword) ?>">
+                    <input type="search" name="keyword" placeholder="Search title, reference code or keyword" value="<?= $keyword ?>">
 
                     <select name="type">
                         <option value="">All employment types</option>
 
                         <?php foreach ($allowedTypes as $jobType): ?>
                             <option
-                                value="<?= jobs_escape($jobType) ?>"
+                                value="<?= $jobType ?>"
                                 <?= $type === $jobType ? "selected" : "" ?>
                             >
-                                <?= jobs_escape($jobType) ?>
+                                <?= $jobType ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
 
                     <button type="submit">Search Jobs</button>
-                    <a class="clear-link" href="jobs.php">Clear filters</a>
+                    <a class="clear-link" href="<?= strtok($_SERVER["REQUEST_URI"], "?") ?>">
+                        Clear filters
+                    </a>
                 </form>
             </section>
 
-
+            <?php if ($result->num_rows === 0): ?>
+                <section class="content-box">
+                    <h2>No jobs found</h2>
+                    <p>Try another keyword or employment type.</p>
+                    <a href="jobs.php">View all jobs</a>
+                </section>
+            <?php endif; ?>
 
             <?php while ($job = $result->fetch_assoc()): ?>
 
             <section class="content-box">
-                <h2><?= jobs_escape($job["title"]) ?></h2>
+                <h2><?= $job["title"] ?></h2>
 
                 <aside>
-                    reference code: <?= jobs_escape($job["ref_code"]) ?>
+                    reference code: <?= $job["ref_code"] ?>
                 </aside>
 
                 <p style="margin-bottom: 15px">
@@ -181,7 +175,7 @@ function requirementList($text, $ordered = false) {
                     text-transform: uppercase; letter-spacing: 2px;">
                         <strong>Employment Type: </strong>
                     </span>
-                    <?= jobs_escape($job["job_type"]) ?>
+                    <?= $job["job_type"] ?>
                 </p>
 
                 <p style="margin-bottom: 15px">
@@ -189,12 +183,12 @@ function requirementList($text, $ordered = false) {
                     text-transform: uppercase; letter-spacing: 2px;">
                         <strong>Salary: </strong>
                     </span>
-                    <?= jobs_escape($job["salary"]) ?>
+                    <?= $job["salary"] ?>
                 </p>
 
                 <h3 style="margin-bottom: 5px">Description:</h3>
                 <p style="margin-bottom: 15px">
-                    <?= nl2br(jobs_escape($job["description"])) ?>
+                    <?= nl2br($job["description"]) ?>
                 </p>
 
                 <details>
@@ -221,7 +215,7 @@ function requirementList($text, $ordered = false) {
                     </details>
 
                     <aside>
-                        <?= nl2br(jobs_escape($job["aside"])) ?>
+                        <?= nl2br($job["aside"]) ?>
                     </aside>
                 </details>
             </section>
