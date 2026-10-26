@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 26, 2026 at 08:19 AM
+-- Generation Time: Oct 26, 2026 at 10:36 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -79,7 +79,10 @@ CREATE TABLE `eoi` (
 --
 
 INSERT INTO `eoi` (`EOInumber`, `job_ref`, `first_name`, `last_name`, `email`, `phone`, `start_date`, `experience`, `linkedin`, `cover_letter`, `status`, `created_at`, `dob`, `gender`, `street`, `suburb`, `state`, `postcode`, `skills`, `other_skills`) VALUES
-(1, 'SOC026', 'Test', 'Applicant', 'sooriyajeswani1@gmail.com', '047544466', NULL, NULL, NULL, NULL, 'New', '2026-10-24 07:20:24', '2007-04-13', 'female', '1 Flinders St', 'Hawthorn East', 'VIC', '3123', 'network-security, incident-response', '');
+(3, 'SEC026', 'Simran', 'Chug', 'simran@gmail.com', '023456786', NULL, NULL, NULL, NULL, 'New', '2026-10-26 08:47:00', '2007-06-13', 'female', '1 xyz', 'hawthorn', 'VIC', '3123', 'penetration-testing, siem', ''),
+(4, 'IRE026', 'Jai', 'Soorya', 'xyz@gmail.com', '0234578765', NULL, NULL, NULL, NULL, 'New', '2026-10-26 08:48:54', '2007-04-13', 'male', '1 Flinders St', 'Hawthorn East', 'VIC', '3123', 'network-security, cloud-security', ''),
+(5, 'PEN026', 'Dat', 'Hyug', 'dat@gmail.com', '02344564433', NULL, NULL, NULL, NULL, 'New', '2026-10-26 08:50:07', '2007-05-13', 'male', '3 street', 'Hawthorn East', 'VIC', '3123', 'network-security, penetration-testing, scripting', ''),
+(6, 'SOC026', 'Mohamad', 'sheikh', 'abc@gmail.com', '035675433', NULL, NULL, NULL, NULL, 'New', '2026-10-26 08:51:35', '2007-08-13', 'male', '5 street', 'Hawthorn East', 'VIC', '3123', 'network-security, penetration-testing', '');
 
 -- --------------------------------------------------------
 
@@ -213,7 +216,7 @@ ALTER TABLE `about_team`
 -- AUTO_INCREMENT for table `eoi`
 --
 ALTER TABLE `eoi`
-  MODIFY `EOInumber` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `EOInumber` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `jobs`

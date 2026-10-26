@@ -363,7 +363,6 @@ if ($is_authenticated && $conn instanceof mysqli && $db_error === '') {
     <meta name="description" content="BlackVaultCyber HR Recruitment Management Portal">
     <meta name="author" content="Mohammad">
     <title>BlackVaultCyber | HR Management Portal</title>
-    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="styles/styles.css">
 </head>
 <body>
@@ -423,7 +422,7 @@ if ($is_authenticated && $conn instanceof mysqli && $db_error === '') {
                     <!-- 1. List All EOIs with Sort Option -->
                     <div class="hr-card" style="border:1px solid #333;background:#0a0a0a;padding:20px;border-radius:6px;">
                         <h3>1. List All EOIs &amp; Sort</h3>
-                        <form method="get" action="manage.php#eoi-results"
+                        <form method="get" action="manage.php#eoi-results">
                             <input type="hidden" name="filter_type" value="all">
                             <label for="sort_by_all">Sort Field</label>
                             <select id="sort_by_all" name="sort_by">
@@ -478,7 +477,7 @@ if ($is_authenticated && $conn instanceof mysqli && $db_error === '') {
                     <!-- 4. Change an EOI Status -->
                     <div class="hr-card" style="border:1px solid #333;background:#0a0a0a;padding:20px;border-radius:6px;">
                         <h3>4. Change an EOI Status</h3>
-                        <form method="get" action="manage.php#eoi-results" autocomplete="off">
+                        <form method="post" action="manage.php" autocomplete="off">
                             <input type="hidden" name="action" value="update_status">
                             <input type="hidden" name="csrf_token" value="<?php echo sanitise_input($csrf_token); ?>">
                             <label for="eoi_id_input">EOI Number *</label>
@@ -496,7 +495,7 @@ if ($is_authenticated && $conn instanceof mysqli && $db_error === '') {
                     <!-- 5. Delete All EOIs by Job Reference -->
                     <div class="hr-card" style="border:1px solid #333;background:#0a0a0a;padding:20px;border-radius:6px;grid-column:1 / -1;">
                         <h3>5. Delete All EOIs by Job Reference</h3>
-                        <form method="get" action="manage.php#eoi-results" autocomplete="off">
+                        <form method="post" action="manage.php" autocomplete="off">
                             <input type="hidden" name="action" value="delete_by_job_ref">
                             <input type="hidden" name="csrf_token" value="<?php echo sanitise_input($csrf_token); ?>">
                             <label for="delete_job_ref_select">Select Job Reference to Delete</label>
