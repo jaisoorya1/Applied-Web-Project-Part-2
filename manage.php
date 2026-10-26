@@ -363,8 +363,7 @@ if ($is_authenticated && $conn instanceof mysqli && $db_error === '') {
     <meta name="description" content="BlackVaultCyber HR Recruitment Management Portal">
     <meta name="author" content="Mohammad">
     <title>BlackVaultCyber | HR Management Portal</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="styles/styles.css">
+   <link rel="stylesheet" href="styles/styles.css">
 </head>
 <body>
     <?php if (file_exists(__DIR__ . '/header.inc')) { require __DIR__ . '/header.inc'; } ?>
