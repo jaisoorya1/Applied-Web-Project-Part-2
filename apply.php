@@ -3,10 +3,6 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 $jobs = [];
 $load_error = '';
-// Read the job reference supplied by an Apply link.
-$selected_ref = is_string($_GET['ref_code'] ?? null)
-    ? trim($_GET['ref_code'])
-    : '';
 
 try {
     require_once __DIR__ . '/settings.php';
@@ -77,9 +73,7 @@ function apply_escape($value)
 
         <?php else: ?>
 
-            <form class="apply-form"
-                  action="process_eoi.php"
-                  method="post">
+            <form class="apply-form" method="post" action="process_eoi.php">
  .
                 <!-- POSITION DETAILS -->
                 <fieldset>

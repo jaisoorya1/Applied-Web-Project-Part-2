@@ -377,7 +377,7 @@ if ($is_authenticated && $conn instanceof mysqli && $db_error === '') {
                 <?php if ($auth_error !== ''): ?>
                     <p style="color: #ff6b6b; margin: 12px 0;"><strong><?php echo sanitise_input($auth_error); ?></strong></p>
                 <?php endif; ?>
-                <form method="post" action="manage.php" style="margin-top: 20px;">
+                <form method="get" action="manage.php#eoi-results" autocomplete="off"style="margin-top: 20px;">
                     <input type="hidden" name="action" value="fallback_login">
                     <fieldset>
                         <legend>HR Manager Sign In</legend>
@@ -399,7 +399,7 @@ if ($is_authenticated && $conn instanceof mysqli && $db_error === '') {
                             <span style="color: #888; font-size: 0.9rem; margin-left: 8px;">| Database: <?php echo sanitise_input($db_name); ?></span>
                         </p>
                     </div>
-                    <form method="post" action="manage.php">
+                    <form method="post" action="manage.php#eoi-results">
                         <input type="hidden" name="action" value="logout">
                         <button type="submit" class="btn-secondary">Log Out</button>
                     </form>
@@ -423,7 +423,7 @@ if ($is_authenticated && $conn instanceof mysqli && $db_error === '') {
                     <!-- 1. List All EOIs with Sort Option -->
                     <div class="hr-card" style="border:1px solid #333;background:#0a0a0a;padding:20px;border-radius:6px;">
                         <h3>1. List All EOIs &amp; Sort</h3>
-                        <form method="get" action="manage.php">
+                        <form method="get" action="manage.php#eoi-results"
                             <input type="hidden" name="filter_type" value="all">
                             <label for="sort_by_all">Sort Field</label>
                             <select id="sort_by_all" name="sort_by">
@@ -445,7 +445,7 @@ if ($is_authenticated && $conn instanceof mysqli && $db_error === '') {
                     <!-- 2. List EOIs by Job Reference -->
                     <div class="hr-card" style="border:1px solid #333;background:#0a0a0a;padding:20px;border-radius:6px;">
                         <h3>2. List EOIs by Job Reference</h3>
-                        <form method="get" action="manage.php">
+                        <form method="get" action="manage.php#eoi-results" autocomplete="off">
                             <input type="hidden" name="filter_type" value="job_ref">
                             <label for="job_ref_select">Select Position Reference</label>
                             <select id="job_ref_select" name="job_ref">
@@ -465,7 +465,7 @@ if ($is_authenticated && $conn instanceof mysqli && $db_error === '') {
                     <!-- 3. List EOIs by Applicant Name (First, Last, or Both) -->
                     <div class="hr-card" style="border:1px solid #333;background:#0a0a0a;padding:20px;border-radius:6px;">
                         <h3>3. List EOIs by Applicant Name</h3>
-                        <form method="get" action="manage.php" autocomplete="off">
+                        <form method="get" action="manage.php#eoi-results" autocomplete="off">
                             <input type="hidden" name="filter_type" value="applicant">
                             <label for="first_name_q">First Name</label>
                             <input type="text" id="first_name_q" name="first_name" placeholder="e.g. Sarah" value="<?php echo sanitise_input($first_name_q); ?>">
@@ -478,7 +478,7 @@ if ($is_authenticated && $conn instanceof mysqli && $db_error === '') {
                     <!-- 4. Change an EOI Status -->
                     <div class="hr-card" style="border:1px solid #333;background:#0a0a0a;padding:20px;border-radius:6px;">
                         <h3>4. Change an EOI Status</h3>
-                        <form method="post" action="manage.php" autocomplete="off">
+                        <form method="get" action="manage.php#eoi-results" autocomplete="off">
                             <input type="hidden" name="action" value="update_status">
                             <input type="hidden" name="csrf_token" value="<?php echo sanitise_input($csrf_token); ?>">
                             <label for="eoi_id_input">EOI Number *</label>
@@ -496,7 +496,7 @@ if ($is_authenticated && $conn instanceof mysqli && $db_error === '') {
                     <!-- 5. Delete All EOIs by Job Reference -->
                     <div class="hr-card" style="border:1px solid #333;background:#0a0a0a;padding:20px;border-radius:6px;grid-column:1 / -1;">
                         <h3>5. Delete All EOIs by Job Reference</h3>
-                        <form method="post" action="manage.php">
+                        <form method="get" action="manage.php#eoi-results" autocomplete="off">
                             <input type="hidden" name="action" value="delete_by_job_ref">
                             <input type="hidden" name="csrf_token" value="<?php echo sanitise_input($csrf_token); ?>">
                             <label for="delete_job_ref_select">Select Job Reference to Delete</label>
@@ -522,7 +522,7 @@ if ($is_authenticated && $conn instanceof mysqli && $db_error === '') {
 
             <!-- EOI Query Results Table -->
             <section class="content-box" style="max-width: 1150px;">
-                <h2>EOI Query Results (<?php echo count($eoi_records); ?> Record<?php echo count($eoi_records) === 1 ? '' : 's'; ?>)</h2>
+               <h2 id="eoi-results">EOI Query Results</h2>
                 <p style="color: #999; font-size: 0.9rem; margin-bottom: 12px;">
                     Sorted by: <strong><?php echo sanitise_input($sortable_columns[$sort_field_in]['label']); ?> (<?php echo sanitise_input($order_by_dir); ?>)</strong>
                     | Breakdown — New: <strong><?php echo (int)$status_counts['New']; ?></strong>,
