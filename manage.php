@@ -377,7 +377,7 @@ if ($is_authenticated && $conn instanceof mysqli && $db_error === '') {
                 <?php if ($auth_error !== ''): ?>
                     <p style="color: #ff6b6b; margin: 12px 0;"><strong><?php echo sanitise_input($auth_error); ?></strong></p>
                 <?php endif; ?>
-                <form method="get" action="manage.php#eoi-results" autocomplete="off"style="margin-top: 20px;">
+                <form method="post" action="manage.php" style="margin-top: 20px;">
                     <input type="hidden" name="action" value="fallback_login">
                     <fieldset>
                         <legend>HR Manager Sign In</legend>
