@@ -1,45 +1,36 @@
 <?php
-// Load the shared database settings.
-require_once __DIR__ . '/settings.php';
-
-// Make database errors available to the catch block.
-mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-
 try {
-    // Connect to MySQL using settings.php.
-        $conn = mysqli_connect($host, $user, $pwd, $sql_db);
+    // Load the shared connection inside try so errors are caught.
+        require_once __DIR__ . '/settings.php';
+            // Read the first team record.
+            $result = mysqli_query($conn,"SELECT * FROM about_team ORDER BY team_id LIMIT 1");
 
-        // Support multilingual text.
-        mysqli_set_charset($conn, 'utf8mb4');
-        // Read the first team record.
-        $result = mysqli_query($conn,"SELECT * FROM about_team ORDER BY team_id LIMIT 1");
+            $team = mysqli_fetch_assoc($result);
 
-        $team = mysqli_fetch_assoc($result);
+            if (!$team) {exit('Please add team information to the database first.');}
+                // Get the members belonging to this team.
+                $statement = mysqli_prepare(
+                    $conn,
+                    "SELECT * FROM team_members
+                    WHERE team_id = ?
+                    ORDER BY display_order, member_id"
+                );
 
-        if (!$team) {exit('Please add team information to the database first.');}
-            // Get the members belonging to this team.
-            $statement = mysqli_prepare(
-                $conn,
-                "SELECT * FROM team_members
-                WHERE team_id = ?
-                ORDER BY display_order, member_id"
-            );
+                $team_id = (int) $team['team_id'];
 
-            $team_id = (int) $team['team_id'];
+                mysqli_stmt_bind_param($statement, 'i', $team_id);
+                mysqli_stmt_execute($statement);
 
-            mysqli_stmt_bind_param($statement, 'i', $team_id);
-            mysqli_stmt_execute($statement);
+                $member_result = mysqli_stmt_get_result($statement);
 
-            $member_result = mysqli_stmt_get_result($statement);
+                $members = [];
 
-            $members = [];
+                while ($member = mysqli_fetch_assoc($member_result)) {
+                    $members[] = $member;
+                }
 
-            while ($member = mysqli_fetch_assoc($member_result)) {
-                $members[] = $member;
-            }
-
-            mysqli_free_result($member_result);
-            mysqli_stmt_close($statement);
+                mysqli_free_result($member_result);
+                mysqli_stmt_close($statement);
     }
     catch (mysqli_sql_exception $error) 
     {
@@ -125,7 +116,7 @@ try {
           
     <section class="team-visual">
 
-        <h2>The Operations Team</h2>
+        <h2>The Operation Team</h2>
 
         <figure class="team-figure"
                 style="max-width: 720px; margin: 25px auto;">
