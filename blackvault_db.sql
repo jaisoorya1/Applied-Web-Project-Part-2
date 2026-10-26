@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 26, 2026 at 06:36 AM
+-- Generation Time: Oct 26, 2026 at 07:02 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -150,16 +150,17 @@ INSERT INTO `team_members` (`member_id`, `team_id`, `member_name`, `student_id`,
 --
 
 CREATE TABLE `users` (
-  `user` varchar(30) NOT NULL,
-  `password` varchar(30) NOT NULL
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `username` varchar(30) NOT NULL,
+  `password` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user`, `password`) VALUES
-('admin', 'admin');
+INSERT INTO `users` (`user_id`, `username`, `password`) VALUES
+(1, 'admin', 'admin');
 
 --
 -- Indexes for dumped tables
@@ -192,6 +193,13 @@ ALTER TABLE `team_members`
   ADD KEY `fk_members_team` (`team_id`);
 
 --
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`user_id`),
+  ADD UNIQUE KEY `unique_username` (`username`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -218,6 +226,12 @@ ALTER TABLE `jobs`
 --
 ALTER TABLE `team_members`
   MODIFY `member_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `user_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables
